@@ -1,5 +1,5 @@
 const mongoose=require('mongoose')
-
+const validator=require('validator')
 
 
 const VisitorSchema=mongoose.Schema({
@@ -7,23 +7,32 @@ const VisitorSchema=mongoose.Schema({
         type:String,
         required:true
     },
-    email:{
-       type: String,
-        required:true,
-    },
+    email:String,
     password:{
         type:String,
-        required:true,
+        required:[true,'Password Field is Empty']
+        
         
     },
     phonenumber:{
         type:Number,
-        maxlength:11
+        maxlength:[11,'Wrong Phone Number']
     }
     
 })
 
+
+
+
+
+
+
+
 const User=new mongoose.model('User',VisitorSchema)
+
+
+
+
 
 
 module.exports= User;
