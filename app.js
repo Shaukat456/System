@@ -34,40 +34,36 @@ app.get('/', (req, res) => {
 // })
 
 app.post('/SignUP', async (req, res) => {
+
+
+
+    const { email } = req.body; // HTML "name" property will be set to email
+    
     try {
-
-        // console.log(saved)
-
-        const mail = req.body.email; // HTML "name" property will be set to email
-
-
-        User.findOne({ email: mail }, async function (err, myUser) {
-            if (!err) {
+        User.findOne({ email:email }, async(user) => {
+            if (user) {
+                return res.status(400).json({ msg: "Email  Already Exist" });
+    
+            } else {
                 const RegUser = new User(req.body)
                 const Saved = await RegUser.save()
                 console.log(Saved)
+                // console.log(myUser)
                 res.send('USER REGISTERED')
-
-            }
-            else {
-                res.send('USER ALREADY EXIST')
-            }
-
-        })
-
-
-
-
-
+            }})
     } catch (error) {
-        console.log(error)
+        res.send(error)
     }
 
-})
+
+}
+)
 
 
 
-app.listen(port, () => {
-    console.log(`listening on PORT ${port}`);
-})
+
+
+            app.listen(port, () => {
+                console.log(`listening on PORT ${port}`);
+            })
 
