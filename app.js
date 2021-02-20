@@ -35,8 +35,6 @@ app.get('/', (req, res) => {
 
 app.post('/SignUP', async (req, res) => {
 
-
-
     const { email } = req.body; // HTML "name" property will be set to email
     
     try {
@@ -58,6 +56,22 @@ app.post('/SignUP', async (req, res) => {
 
 }
 )
+
+app.get('/login' , async(req,res)=>{
+    const { email ,pass } = req.body; // HTML "name" property will be set to email
+    try {
+        const FindUser=await User.find({email:email}, async(err,docs)=>{
+           const re=console.log(docs)
+        })
+        console.log(FindUser)
+        // res.send(FindUser)
+        res.send(' User just Login')
+        
+    } catch (error) {
+        res.send(error)
+        console.log(error)
+    }
+})
 
 
 
