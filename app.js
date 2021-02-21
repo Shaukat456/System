@@ -38,8 +38,8 @@ app.post('/SignUP', async (req, res) => {
     const { email } = req.body; // HTML "name" property will be set to email
     
     try {
-        User.findOne({ email:email }, async(user) => {
-            if (user) {
+        User.find({ email:email }, async(err,user) => {
+            if (err) {
                 return res.status(400).json({ msg: "Email  Already Exist" });
     
             } else {
@@ -61,15 +61,24 @@ app.get('/login' , async(req,res)=>{
     const { email ,pass } = req.body; // HTML "name" property will be set to email
     try {
         const FindUser=await User.find({email:email}, async(err,docs)=>{
-           const re=console.log(docs)
+         if(err){
+             return err
+         }
+         else{
+              return res.send(docs)
+              console.log(docs)
+         }
+          
+
+
         })
-        console.log(FindUser)
-        // res.send(FindUser)
-        res.send(' User just Login')
+        // console.log(FindUser)
         
     } catch (error) {
         res.send(error)
         console.log(error)
+        res.send('user not found')
+
     }
 })
 
