@@ -17,30 +17,50 @@ app.get('/', (req, res) => {
 })
 
 
-    //Placing and Seeing Orders
+//Placing and Seeing Orders
 
 
 app.post('/Orders', async (req, res) => {
     const { order } = req.body;
 
+    try {
     const RegisterOrder = new Order(req.body)
     const SavedOrder = await RegisterOrder.save()
     console.log(SavedOrder)
-    res.send(["This  Has been placed as your order  ",SavedOrder ])
+    res.send(["This  Has been placed as your order  ", SavedOrder])
 
-    
+    } catch (error) {
+        res.send(error)
+        console.log(error)
+    }
+
+
 
 
 })
 app.get('/Orders', async (req, res) => {
-    // const {}=req.body;
+    const { name } = req.body;
 
-    const SeeOrders = await Order.find({ name: req.body.name }, (error, placedOrder) => {
-    return [res.send(placedOrder),console.log(placedOrder)];
+    const SeeOrders = await Order.find({ name: name }, (error, placedOrder) => {
+        if(error){
+            return console.log(error)
+        }
+        else{
+        return [res.send(placedOrder), console.log(placedOrder)];
+
+        }
 
     })
 
 
+})
+
+app.delete('/Orders',async(req,res)=>{
+    const DeleteOrder=await Order.deleteMany({},(data,err)=>{
+        console.log(data)
+        return res.send('deleted')
+    })
+    console.log(DeleteOrder)
 })
 
 

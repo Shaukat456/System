@@ -5,8 +5,7 @@ const mongoose=require('mongoose')
 const OrdersSchema=mongoose.Schema({
    name:{
        type:String,
-       required:true,
-       unique:true
+      
    },
    thing:{
        type:String,
