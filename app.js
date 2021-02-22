@@ -122,12 +122,21 @@ app.delete('/Orders/:thing',async(req,res)=>{
 })
 
 app.delete('/Orders',async(req,res)=>{
+   try {
     const DeleteAllOrders=await Order.deleteMany({  },(err,data)=>{
-        console.log([err,data])
-        res.send('deleted'+ req.body)
-        
+        if (err) return console.log(err);
+        else{ return res.send( "ALL ORDERS DELETED")
+        // console.log(data)
+            
+    }
+      
     })
-    console.log(DeleteAllOrders)
+    // console.log(DeleteAllOrders)
+   } catch (error) {
+       return console.log(error)
+   }
+
+    
 })
 
 
