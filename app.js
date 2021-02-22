@@ -17,51 +17,6 @@ app.get('/', (req, res) => {
 })
 
 
-//Placing and Seeing Orders
-
-
-app.post('/Orders', async (req, res) => {
-    const { order } = req.body;
-
-    try {
-    const RegisterOrder = new Order(req.body)
-    const SavedOrder = await RegisterOrder.save()
-    console.log(SavedOrder)
-    res.send(["This  Has been placed as your order  ", SavedOrder])
-
-    } catch (error) {
-        res.send(error)
-        console.log(error)
-    }
-
-
-
-
-})
-app.get('/Orders', async (req, res) => {
-    const { name } = req.body;
-
-    const SeeOrders = await Order.find({ name: name }, (error, placedOrder) => {
-        if(error){
-            return console.log(error)
-        }
-        else{
-        return [res.send(placedOrder), console.log(placedOrder)];
-
-        }
-
-    })
-
-
-})
-
-app.delete('/Orders',async(req,res)=>{
-    const DeleteOrder=await Order.deleteMany({},(data,err)=>{
-        console.log(data)
-        return res.send('deleted')
-    })
-    console.log(DeleteOrder)
-})
 
 
 
@@ -115,6 +70,65 @@ app.get('/login', async (req, res) => {
     }
 })
 
+
+
+//Placing and Seeing Orders
+
+
+app.post('/Orders', async (req, res) => {
+    const { order } = req.body;
+
+    try {
+    const RegisterOrder = new Order(req.body)
+    const SavedOrder = await RegisterOrder.save()
+    console.log(SavedOrder)
+    res.send(["This  Has been placed as your order  ", SavedOrder])
+
+    } catch (error) {
+        res.send(error)
+        console.log(error)
+    }
+
+
+
+
+})
+app.get('/Orders', async (req, res) => {
+    const { name } = req.body;
+
+    const SeeOrders = await Order.find({ name: name }, (error, placedOrder) => {
+        if(error){
+            return console.log(error)
+        }
+        else{
+        return [res.send(placedOrder), console.log(placedOrder)];
+
+        }
+
+    })
+
+
+})
+
+    //Deleting One Order
+app.delete('/Orders/:thing',async(req,res)=>{
+    const { thing }=req.params
+
+    const DeleteOrder=await Order.deleteOne({thing},(err,data)=>{
+        console.log([thing,data])
+        res.send(data)
+    })
+    console.log(DeleteOrder)
+})
+
+app.delete('/Orders',async(req,res)=>{
+    const DeleteAllOrders=await Order.deleteMany({  },(err,data)=>{
+        console.log([err,data])
+        res.send('deleted'+ req.body)
+        
+    })
+    console.log(DeleteAllOrders)
+})
 
 
 
