@@ -29,11 +29,7 @@ const VisitorSchema=mongoose.Schema({
 
 
 
-// VisitorSchema.pre("save",async(next)=>{
-//     const hashPass=await bcrpyt.hash(password,10)
-//    this.password=await bcrpyt.hash(this.password,10)
-//     next()
-// })
+
 
 
 
