@@ -5,7 +5,7 @@ require('./db/conn')
 const User = require('./models/user')
 const Order = require('./models/order')
 const { json } = require('body-parser')
-
+const bcrypt=require("bcrypt")
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 
@@ -18,17 +18,14 @@ app.get('/', (req, res) => {
 
 
 
-
-
-
 app.post('/SignUP', async (req, res) => {
 
     const { email } = req.body; // HTML "name" property will be set to email
 
     try {
-        User.find({ email: email }, async (err, user) => {
+        User.findOne({ email: email }, async (err, user) => {
             if (err) {
-                return res.status(400).json({ msg: "Email  Already Exist" });
+                return res.status(400).json({ msg: "Email  Already Exist" }); 
 
             } else {
                 const RegUser = new User(req.body)
@@ -39,13 +36,14 @@ app.post('/SignUP', async (req, res) => {
         })
     } catch (error) {
         res.send(error)
+        console.log(error);
     }
 
 
 }
 )
 
-app.get('/login', async (req, res) => {
+app.post('/login', async (req, res) => {
     const { email, pass } = req.body; // HTML "name" property will be set to email
     try {
         const FindUser = await User.find({ email: email }, async (err, docs) => {
@@ -53,14 +51,16 @@ app.get('/login', async (req, res) => {
                 return err
             }
             else {
-                return res.send(docs)
-                console.log(docs)
+                return [
+                    res.send(docs),
+                    console.log(docs)
+                ]
+                
             }
-
+          
 
 
         })
-        // console.log(FindUser)
 
     } catch (error) {
         res.send(error)
@@ -114,13 +114,17 @@ app.get('/Orders', async (req, res) => {
 app.delete('/Orders/:thing',async(req,res)=>{
     const { thing }=req.params
 
+   try {
     const DeleteOrder=await Order.deleteOne({thing},(err,data)=>{
         console.log([thing,data])
-        res.send(data)
+      return res.send(data)
     })
     console.log(DeleteOrder)
+   } catch (error) {
+       return res.send(error)
+   }
 })
-
+        // Deleting All Orders
 app.delete('/Orders',async(req,res)=>{
    try {
     const DeleteAllOrders=await Order.deleteMany({  },(err,data)=>{
