@@ -8,11 +8,15 @@ const { json } = require('body-parser')
 const bcrypt=require("bcrypt")
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
+const path=require('path')
 
+// path.join(__dirname,'.')
+app.set('view engine','hbs')
+// app.use(path.join(__dirname,))
 
 
 app.get('/', (req, res) => {
-    res.send('HOME SCREEN')
+    res.render('index')
 
 })
 
@@ -22,17 +26,25 @@ app.post('/SignUP', async (req, res) => {
 
     const { email } = req.body; // HTML "name" property will be set to email
 
+
+    //Checking if user already exists
+    let user = await User.findOne({email})
+    if (user) return res.status(400).send('Email  Already Exist')
+
     try {
         User.findOne({ email: email }, async (err, user) => {
-            if (err) {
-                return res.status(400).json({ msg: "Email  Already Exist" }); 
+            const RegUser = new User(req.body)
+            const Saved = await RegUser.save()
+            console.log(Saved)
+            res.send('USER REGISTERED')
+            // if (err) {
+            //     return res.status(400).json(
+            //         { msg: "Email  Already Exist" }
 
-            } else {
-                const RegUser = new User(req.body)
-                const Saved = await RegUser.save()
-                console.log(Saved)
-                res.send('USER REGISTERED')
-            }
+            //     ); 
+
+            // } else {
+            // }
         })
     } catch (error) {
         res.send(error)
